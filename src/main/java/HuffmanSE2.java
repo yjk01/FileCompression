@@ -40,7 +40,7 @@ public class HuffmanSE2 {
     }
 
     // compress bytes from standard input and write to standard output
-    public static void compress(String fin, String fout, boolean log) {
+    public static void compress(String fin, boolean log) {
         // read the input
         BinaryIn in = new BinaryIn(fin);
         String s = in.readString();
@@ -67,7 +67,7 @@ public class HuffmanSE2 {
         String[] st = new String[R];
         buildCode(st, root, "", log);
 
-        BinaryOut out = new BinaryOut(fout + ".hh");
+        BinaryOut out = new BinaryOut(fin + ".hh");
         // print trie for decoder
         writeTrie(root, out);
         if (log)
@@ -157,24 +157,24 @@ public class HuffmanSE2 {
     }
 
     public static void main(String[] args) {
-        if (args.length < 2 || args.length > 3) {
+        if (args.length < 1 || args.length > 2) {
             System.out.println(
                     "Wrong Number of arguments! Try java HuffmanSE2 uncompressed-file-name compressed-file-name (l)");
             return;
         }
 
         String input = args[0];
-        String output = args[1];
-        boolean printLogs = args.length == 3 && args[2].equals("l"); // if args has 3 elements and the third element is
+        boolean printLogs = args.length == 2 && args[1].equals("l"); // if args has 3 elements and the third element is
                                                                      // "l" set printLogs to true
 
         // if printLogs is true, set log to true, else set log to false and run compress
         if (printLogs) {
             log = true;
-            compress(input, output, log);
+            compress(input, log);
         } else {
             log = false;
-            compress(input, output, log);
+            compress(input, log);
         }
+        System.out.println("Compression complete.");
     }
 }
