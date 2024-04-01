@@ -6,17 +6,21 @@ public class SchubsL {
     private static boolean log = false;
 
     public static void compress(String fin, boolean log) {
-        String input = BinaryStdIn.readString();
+        System.out.println("Compressing " + fin + "...");
+        BinaryIn in = new BinaryIn(fin);
+        String input = in.readString();
         TST<Integer> st = new TST<Integer>();
+
         for (int i = 0; i < R; i++) {
             st.put("" + (char) i, i);
         }
 
         int code = R + 1;
+        BinaryOut out = new BinaryOut(fin + ".ll");
 
         while (input.length() > 0) {
             String s = st.longestPrefixOf(input);
-            BinaryStdOut.write(st.get(s), W);
+            out.write(st.get(s), W);
             int t = s.length();
             if (t < input.length() && code < L) {
                 st.put(input.substring(0, t + 1), code++);
@@ -24,8 +28,8 @@ public class SchubsL {
             input = input.substring(t);
         }
 
-        BinaryStdOut.write(R, W);
-        BinaryStdOut.close();
+        out.write(R, W);
+        out.close();
     }
 
     public static void expand() {
