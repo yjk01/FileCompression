@@ -67,7 +67,7 @@ public class HuffmanSE2 {
         String[] st = new String[R];
         buildCode(st, root, "", log);
 
-        BinaryOut out = new BinaryOut(fout);
+        BinaryOut out = new BinaryOut(fout + ".hh");
         // print trie for decoder
         writeTrie(root, out);
         if (log)
