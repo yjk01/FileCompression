@@ -8,7 +8,7 @@
  * Execute     : java HuffmanSE2 uncompressed-file-name compressed-file-name (l)
  */
 
-public class HuffmanSE2 {
+public class SchubsH {
 
     // alphabet size of extended ASCII
     private static final int R = 256;
@@ -136,7 +136,7 @@ public class HuffmanSE2 {
     private static void writeTrie(Node x, BinaryOut out) {
         if (x.isLeaf()) {
             out.write(true);
-            out.write(x.ch, 8);
+            out.write(x.ch);
             return;
         }
         BinaryStdOut.write(false);
