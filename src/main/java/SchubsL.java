@@ -1,7 +1,7 @@
 public class SchubsL {
-    private static final int R = 256;
-    private static final int L = 4096;
-    private static final int W = 12;
+    private static final int R = 128;
+    private static final int L = 256;
+    private static final int W = 8;
 
     private static boolean log = false;
 

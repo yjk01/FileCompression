@@ -93,7 +93,7 @@ public class SchubsH {
         }
 
         // flush output stream
-        out.flush();
+        // out.flush();
         out.close();
     }
 
@@ -139,7 +139,7 @@ public class SchubsH {
             out.write(x.ch);
             return;
         }
-        BinaryStdOut.write(false);
+        out.write(false);
         writeTrie(x.left, out);
         writeTrie(x.right, out);
     }
