@@ -3,9 +3,7 @@ public class SchubsL {
     private static final int L = 256;
     private static final int W = 8;
 
-    private static boolean log = false;
-
-    public static void compress(String fin, boolean log) {
+    public static void compress(String fin) {
         System.out.println("Compressing " + fin + "...");
         BinaryIn in = new BinaryIn(fin);
         String input = in.readString();
@@ -66,17 +64,9 @@ public class SchubsL {
         }
 
         String input = args[0];
-        boolean printLogs = args.length == 2 && args[1].equals("l"); // if args has 3 elements and the third element is
-                                                                     // "l" set printLogs to true
 
         // if printLogs is true, set log to true, else set log to false and run compress
-        if (printLogs) {
-            log = true;
-            compress(input, log);
-        } else {
-            log = false;
-            compress(input, log);
-        }
+        compress(input);
         System.out.println("Compression complete.");
     }
 
