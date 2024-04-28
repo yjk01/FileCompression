@@ -12,7 +12,6 @@ public class SchubsH {
 
     // alphabet size of extended ASCII
     private static final int R = 256;
-    private static boolean log = false;
 
     // Huffman trie node
     private static class Node implements Comparable<Node> {
@@ -40,7 +39,7 @@ public class SchubsH {
     }
 
     // compress bytes from standard input and write to standard output
-    public static void compress(String fin, boolean log) {
+    public static void compress(String fin) {
         // read the input
         BinaryIn in = new BinaryIn(fin);
         String s = in.readString();
@@ -48,30 +47,21 @@ public class SchubsH {
 
         // tabulate frequency counts
         int[] freq = new int[R];
-        if (log) {
-            System.out.println(
-                    "----------------------------------------------log----------------------------------------------");
-            System.out.println("Input: " + new String(input));
-        }
         for (int i = 0; i < input.length; i++) {
             char c = input[i];
             freq[c]++;
         }
 
-        if (log)
-            System.out.println("Input size: " + input.length + " bytes \n");
         // build Huffman trie
-        Node root = buildTrie(freq, log);
+        Node root = buildTrie(freq);
 
         // build code table
         String[] st = new String[R];
-        buildCode(st, root, "", log);
+        buildCode(st, root, "");
 
         BinaryOut out = new BinaryOut(fin + ".hh");
         // print trie for decoder
         writeTrie(root, out);
-        if (log)
-            System.out.println("\nencoding...\n");
 
         // print number of bytes in original uncompressed message
         out.write(input.length);
@@ -88,8 +78,6 @@ public class SchubsH {
                     throw new RuntimeException("Illegal state");
                 }
             }
-            if (log)
-                System.out.println("Char " + input[i] + ": " + code);
         }
 
         // flush output stream
@@ -98,7 +86,7 @@ public class SchubsH {
     }
 
     // build the Huffman trie given frequencies
-    private static Node buildTrie(int[] freq, boolean log) {
+    private static Node buildTrie(int[] freq) {
 
         // initialze priority queue with singleton trees
         MinPQ<Node> pq = new MinPQ<Node>();
@@ -121,14 +109,8 @@ public class SchubsH {
                 Node right = pq.delMin();
                 Node parent = new Node('\0', left.freq + right.freq, left, right);
                 pq.insert(parent);
-                if (log)
-                    System.out.println(
-                            "buildTrie: new parent: " + " Parent: " + parent.freq + " Frequencies:  " + left.freq
-                                    + " and " + right.freq);
             }
         }
-
-        System.out.println("\n");
         return pq.delMin();
     }
 
@@ -145,36 +127,25 @@ public class SchubsH {
     }
 
     // make a lookup table from symbols and their encodings
-    private static void buildCode(String[] st, Node x, String s, boolean log) {
+    private static void buildCode(String[] st, Node x, String s) {
         if (!x.isLeaf()) {
-            buildCode(st, x.left, s + '0', log);
-            buildCode(st, x.right, s + '1', log);
+            buildCode(st, x.left, s + '0');
+            buildCode(st, x.right, s + '1');
         } else {
             st[x.ch] = s;
-            if (log)
-                System.out.println("buildCode " + x.ch + ": " + s);
         }
     }
 
     public static void main(String[] args) {
         if (args.length < 1 || args.length > 2) {
             System.out.println(
-                    "Wrong Number of arguments! Try java HuffmanSE2 uncompressed-file-name compressed-file-name (l)");
+                    "Wrong Number of arguments! Try java SchubsH <filename>");
             return;
         }
 
         String input = args[0];
-        boolean printLogs = args.length == 2 && args[1].equals("l"); // if args has 3 elements and the third element is
-                                                                     // "l" set printLogs to true
 
-        // if printLogs is true, set log to true, else set log to false and run compress
-        if (printLogs) {
-            log = true;
-            compress(input, log);
-        } else {
-            log = false;
-            compress(input, log);
-        }
+        compress(input);
         System.out.println("Compression complete.");
     }
 }
