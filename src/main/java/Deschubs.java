@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.IOException;
+
 public class Deschubs {
 
     private static final int R = 128;
@@ -102,7 +105,77 @@ public class Deschubs {
         out.flush();
     }
 
-    public static void main(String[] args) {
+    public static void expandA(String fin) throws IOException {
+        BinaryIn in = new BinaryIn(fin);
+        String fout = fin.substring(0, fin.lastIndexOf(".zh"));
+        BinaryOut out = new BinaryOut(fout);
+        Node root = readTrie(in, out);
+
+        // number of bytes to write
+        int length = in.readInt();
+
+        // decode using the Huffman trie
+        for (int i = 0; i < length; i++) {
+            Node x = root;
+            while (!x.isLeaf()) {
+                boolean bit = in.readBoolean();
+                if (bit)
+                    x = x.right;
+                else
+                    x = x.left;
+            }
+            out.write(x.ch);
+        }
+        out.flush();
+
+        in = null;
+
+        File file = new File(fout);
+
+        if (!file.exists()) {
+            throw new IOException("File not found: " + fout);
+        }
+
+        in = new BinaryIn(fout);
+
+        while (!in.isEmpty()) {
+            // Read filename size
+            int filenamesize = in.readInt();
+
+            // Read separator
+            char sep = in.readChar();
+
+            // Read filename
+            StringBuilder filenameBuilder = new StringBuilder();
+            for (int i = 0; i < filenamesize; i++) {
+                filenameBuilder.append(in.readChar());
+            }
+            String filename = filenameBuilder.toString();
+
+            // Read separator
+            sep = in.readChar();
+
+            // Read file length
+            long filesize = in.readLong();
+
+            // Read separator
+            sep = in.readChar();
+
+            // Create BinaryOut for writing the extracted file
+            out = new BinaryOut(filename);
+
+            // Write file content to BinaryOut
+            for (int i = 0; i < filesize; i++) {
+                out.write(in.readChar());
+            }
+
+            System.out.println("Extracted file: " + filename);
+            // Close BinaryOut
+            out.close();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
         if (args.length < 1 || args.length > 1) {
             System.out.println(
                     "Wrong Number of arguments! Try java Deschubs <filename>.hh|ll");
@@ -124,6 +197,14 @@ public class Deschubs {
 
         if (extension.equals("ll")) {
             expandL(input);
+        }
+
+        if (extension.equals("zh")) {
+            expandA(input);
+        }
+
+        if (extension.equals("zl")) {
+            System.err.println("RIP LOL");
         }
 
         System.out.println("DECompression complete.");
