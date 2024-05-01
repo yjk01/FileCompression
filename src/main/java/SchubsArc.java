@@ -29,14 +29,57 @@ public class SchubsArc {
         }
     }
 
+    public static void Tars(String[] args) throws IOException {
+        BinaryOut out = null;
+        char separator = (char) 255; // all ones 11111111
+
+        try {
+            // case when number of arguments is wrong
+            if (args.length < 1) {
+                System.err.println("Wrong number of arguments! Try java SchubsArc archive-name file1 file2 ...");
+                return;
+            }
+
+            // archive file
+            out = new BinaryOut(args[0]);
+
+            // Loop through input files and put them in archive
+            for (int i = 1; i < args.length; i++) {
+                File inFile = new File(args[i]);
+
+                // Check if input file exists and is a regular file
+                if (!inFile.exists() || !inFile.isFile()) {
+                    System.err.println("Input file does not exist or is not a regular file: " + args[i]);
+                    continue; // Skip to the next file
+                }
+
+                BinaryIn bin = new BinaryIn(args[i]);
+                long fileSize = inFile.length();
+                int fileNameSize = args[i].length();
+
+                // Write info to archive
+                out.write(fileNameSize);
+                out.write(separator);
+                out.write(args[i]);
+                out.write(separator);
+                out.write(fileSize);
+                out.write(separator);
+                out.write(bin.readString());
+            }
+        } finally {
+            if (out != null)
+                out.close();
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-            throw new IllegalArgumentException("No filles");
+            throw new IllegalArgumentException("No files");
         }
 
-        String tarFileName = "archive";
+        String tarFileName = args[0];
 
-        Tarsn.main(tarFileName, args);
+        Tars(args);
 
         BinaryIn in = new BinaryIn(tarFileName);
         String s = in.readString();

@@ -173,6 +173,11 @@ public class Deschubs {
             // Close BinaryOut
             out.close();
         }
+
+        File fileToDelete = new File(fout);
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
+        }
     }
 
     public static void main(String[] args) throws IOException {

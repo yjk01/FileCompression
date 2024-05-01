@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.File;
 
 public class Tarsn {
-    public static void main(String name, String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         BinaryOut out = null;
         char separator = (char) 255; // all ones 11111111
 
@@ -24,10 +24,10 @@ public class Tarsn {
             }
 
             // archive file
-            out = new BinaryOut(name);
+            out = new BinaryOut(args[0]);
 
             // Loop through input files and put them in archive
-            for (int i = 0; i < args.length; i++) {
+            for (int i = 1; i < args.length; i++) {
                 File inFile = new File(args[i]);
 
                 // Check if input file exists and is a regular file

@@ -59,7 +59,7 @@ public class SchubsL {
     public static void main(String[] args) {
         if (args.length < 1 || args.length > 2) {
             System.out.println(
-                    "Wrong Number of arguments! Try java HuffmanSE2 uncompressed-file-name compressed-file-name (l)");
+                    "Wrong Number of arguments! Try java SchubsL <filename>");
             return;
         }
 
