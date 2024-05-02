@@ -57,16 +57,17 @@ public class SchubsL {
     }
 
     public static void main(String[] args) {
-        if (args.length < 1 || args.length > 2) {
+        if (args.length < 1) {
             System.out.println(
                     "Wrong Number of arguments! Try java SchubsL <filename>");
             return;
         }
 
-        String input = args[0];
+        for (int i = 0; i < args.length; i++) {
+            compress(args[i]);
+        }
 
         // if printLogs is true, set log to true, else set log to false and run compress
-        compress(input);
         System.out.println("Compression complete.");
     }
 

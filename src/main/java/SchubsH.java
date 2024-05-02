@@ -40,6 +40,7 @@ public class SchubsH {
 
     // compress bytes from standard input and write to standard output
     public static void compress(String fin) {
+        System.err.println("Compressing " + fin + "...");
         // read the input
         BinaryIn in = new BinaryIn(fin);
         String s = in.readString();
@@ -137,15 +138,16 @@ public class SchubsH {
     }
 
     public static void main(String[] args) {
-        if (args.length < 1 || args.length > 2) {
+        if (args.length < 1) {
             System.out.println(
                     "Wrong Number of arguments! Try java SchubsH <filename>");
             return;
         }
 
-        String input = args[0];
+        for (int i = 0; i < args.length; i++) {
+            compress(args[i]);
+        }
 
-        compress(input);
         System.out.println("Compression complete.");
     }
 }

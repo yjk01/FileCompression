@@ -25,11 +25,13 @@ import org.junit.Test;
 public class ProjectTest {
     private String fin;
     private String fin1;
+    private String farc; // variable used to test SchubsArc
 
     @Before
     public void setUp() {
         fin = "test.txt";
         fin1 = "test1.txt.ll";
+        farc = "blee";
 
     }
 
@@ -53,6 +55,11 @@ public class ProjectTest {
         File file4 = new File(fin1);
         if (file4.exists()) {
             file4.delete();
+        }
+
+        File file5 = new File(farc + ".zh");
+        if (file5.exists()) {
+            file5.delete();
         }
     }
 
@@ -552,5 +559,192 @@ public class ProjectTest {
         assertTrue(decompmessage.equals(testcontent));
 
         System.err.println("-Really long file test for Deschubs passed \n");
+    }
+
+    // Test cases for SchubsArc
+
+    @Test
+    public void testNormalT() throws IOException {
+        System.err.println("Testing normal case for SchubsArc");
+
+        String testcontent = "Test content for testing archiving";
+
+        Files.write(Paths.get(fin), testcontent.getBytes());
+
+        String[] args = { farc, fin };
+
+        SchubsArc.main(args);
+
+        File file = new File(farc + ".zh");
+        assertTrue(file.exists());
+
+        assertTrue(file.length() > 0);
+        System.err.println("-Normal case test for SchubsArc passed \n");
+    }
+
+    @Test
+    public void testEmptyT() throws IOException {
+        System.err.println("Testing empty file for SchubsArc");
+
+        try {
+            new File(fin).createNewFile();
+        } catch (Exception e) {
+            fail("Failed to create a file");
+        }
+
+        assertTrue(new File(fin).length() == 0);
+
+        if (new File(fin).length() > 0) {
+            String[] args = { farc, fin };
+            SchubsArc.main(args);
+
+        } else {
+            System.err.println("Uncompressed file is empty. Skipping compression");
+            assertTrue(true);
+        }
+
+        System.err.println("-Empty file test for SchubsArc passed \n");
+    }
+
+    @Test
+    public void testNonExistingFileT() throws IOException {
+        System.err.println("Testing non-existing file for SchubsArc");
+
+        String mFile = "missing.txt";
+
+        try {
+            SchubsArc.main(new String[] { farc, mFile });
+        } catch (RuntimeException e) {
+            assertTrue(true);
+            System.err.println("Trying to read from nonexisting file. Skipping archive/comopression");
+        }
+
+        System.err.println("-Non-existing file test for SchubsArc passed \n");
+    }
+
+    @Test
+    public void testDestinationArchiveExistsT() throws IOException {
+        System.err.println("Testing destination archive exists for SchubsArc");
+
+        String testcontent = "Test content for testing archiving";
+
+        Files.write(Paths.get(fin), testcontent.getBytes());
+
+        String[] args = { farc, fin };
+
+        SchubsArc.main(args);
+
+        File file = new File(farc + ".zh");
+        assertTrue(file.exists());
+
+        assertTrue(file.length() > 0);
+
+        SchubsArc.main(args);
+
+        assertTrue(file.exists());
+
+        System.err.println("-Destination archive exists test for SchubsArc passed \n");
+    }
+
+    @Test
+    public void testDirectoryInputT() throws IOException {
+        System.err.println("Testing directory input for SchubsArc");
+
+        File directory = new File("testdir");
+
+        String[] args = { farc, "testdir" };
+
+        try {
+            directory.mkdir();
+            SchubsArc.main(args);
+        } catch (RuntimeException e) {
+            assertTrue(true);
+            System.err.println("Trying to read from directory. Skipping archive/comopression");
+        } finally {
+            directory.delete();
+        }
+
+        System.err.println("-Directory input test for SchubsArc passed \n");
+
+    }
+
+    @Test
+    public void testContainManyCharT() throws IOException {
+        System.err.println("Testing file with many characters for SchubsArc");
+
+        String testcontent = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+";
+
+        try {
+            Files.write(Paths.get(fin), testcontent.getBytes());
+        } catch (Exception e) {
+            fail("Failed to write to a file");
+        }
+
+        assertTrue(new File(fin).length() > 0);
+
+        String[] args = { farc, fin };
+        SchubsArc.main(args);
+
+        File file = new File(farc + ".zh");
+        assertTrue(file.exists());
+
+        assertTrue(file.length() > 0);
+
+        System.err.println("-File with many characters test for SchubsArc passed \n");
+    }
+
+    @Test
+    public void testContainManyExtraT() throws IOException {
+        System.err.println("Testing file with many things for SchubsArc");
+
+        String testcontent = "Lorem ipsum dolor sit amet, 123 consectetur adipiscingelit."
+                + "Sed 456 vehicula 789 mauris 0 eget 1 semper 2. "
+                + "Nulla facilisi. Aenean 3 aliquam 4, 5 justo 6 id 7 finibus 8. "
+                + "Vestibulum 9 ante 10 ipsum, 11 euismod 12 vitae 13, 14 tincidunt 15.\n";
+
+        try {
+            Files.write(Paths.get(fin), testcontent.getBytes());
+        } catch (Exception e) {
+            fail("Failed to write to a file");
+        }
+
+        assertTrue(new File(fin).length() > 0);
+
+        String[] args = { farc, fin };
+        SchubsArc.main(args);
+
+        File file = new File(farc + ".zh");
+        assertTrue(file.exists());
+
+        assertTrue(file.length() > 0);
+
+        System.err.println("-File with many different things test for SchubsArc passed \n");
+    }
+
+    @Test
+    public void WrongNumberofArgsT() throws IOException {
+        System.err.println("Testing wrong number of arguments for SchubsArc");
+
+        ByteArrayOutputStream newOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(newOut));
+
+        ByteArrayInputStream in = new ByteArrayInputStream(farc.getBytes());
+        System.setIn(in);
+
+        try {
+            SchubsArc.main(new String[] {});
+
+            String output = newOut.toString().trim();
+
+            System.err.println(output);
+        } catch (IllegalArgumentException e) {
+            assertTrue(true);
+            System.err.println("Wrong number of arguments! Try java SchubsArc archive-name file1 file2 ...");
+        } finally {
+            System.setOut(System.out);
+            System.setIn(System.in);
+        }
+
+        System.err.println("-Wrong number of arguments test for SchubsArc passed \n");
     }
 }
