@@ -197,10 +197,23 @@ public class Deschubs {
         }
 
         if (extension.equals("hh")) {
+            File file = new File(input.substring(0, input.lastIndexOf(".hh")));
+            if (file.exists()) {
+                System.out.println(
+                        "File " + input.substring(0, input.lastIndexOf(".hh")) + " already exists. Skipping...");
+                return;
+            }
             expandH(input);
         }
 
         if (extension.equals("ll")) {
+            File file = new File(input.substring(0, input.lastIndexOf(".ll")));
+            if (file.exists()) {
+                System.out.println(
+                        "File " + input.substring(0, input.lastIndexOf(".ll")) + " already exists. Skipping...");
+                return;
+            }
+
             expandL(input);
         }
 
@@ -209,10 +222,10 @@ public class Deschubs {
         }
 
         if (extension.equals("zl")) {
-            System.err.println("RIP LOL");
+            System.err.println("This file type is not supported.");
         }
 
-        System.out.println("DECompression complete.");
+        System.out.println("Decompression complete.");
     }
 
 }

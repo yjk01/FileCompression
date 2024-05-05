@@ -1,3 +1,5 @@
+import java.io.File;
+
 public class SchubsL {
     private static final int R = 128;
     private static final int L = 256;
@@ -64,11 +66,14 @@ public class SchubsL {
         }
 
         for (int i = 0; i < args.length; i++) {
+            File file = new File(args[i] + ".ll");
+
+            if (file.exists()) {
+                System.out.println("File " + args[i] + ".ll already exists. Skipping compression.");
+                continue;
+            }
             compress(args[i]);
         }
-
-        // if printLogs is true, set log to true, else set log to false and run compress
-        System.out.println("Compression complete.");
     }
 
 }

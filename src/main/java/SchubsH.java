@@ -8,6 +8,8 @@
  * Execute     : java HuffmanSE2 uncompressed-file-name compressed-file-name (l)
  */
 
+import java.io.File;
+
 public class SchubsH {
 
     // alphabet size of extended ASCII
@@ -145,9 +147,14 @@ public class SchubsH {
         }
 
         for (int i = 0; i < args.length; i++) {
+            File file = new File(args[i] + ".hh");
+
+            if (file.exists()) {
+                System.out.println("File " + args[i] + ".hh already exists. Skipping...");
+                continue;
+            }
+
             compress(args[i]);
         }
-
-        System.out.println("Compression complete.");
     }
 }
