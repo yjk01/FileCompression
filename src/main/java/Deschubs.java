@@ -1,3 +1,13 @@
+/*
+ * Program     : Decompress / Extract
+ * Description : This program decompresses a file using Huffman encoding / LZW or extracts an archive file.
+ * Author      : Jun Kim
+ * Date        : 05/07/2024
+ * Course      : CS375
+ * Compile     : javac Deschubs.java
+ * Execute     : java Deschubs filename.hh|ll|zh
+ */
+
 import java.io.File;
 import java.io.IOException;
 
@@ -41,9 +51,9 @@ public class Deschubs {
     public static void expandH(String fin) {
 
         // read in Huffman trie from input stream
-
         BinaryIn in = new BinaryIn(fin);
         String fout = fin.substring(0, fin.lastIndexOf(".hh"));
+        // write the uncompressed file to output stream
         BinaryOut out = new BinaryOut(fout);
         Node root = readTrie(in, out);
 
@@ -65,6 +75,7 @@ public class Deschubs {
         out.flush();
     }
 
+    // read in Huffman trie from input stream
     private static Node readTrie(BinaryIn in, BinaryOut out) {
         boolean isLeaf = in.readBoolean();
         if (isLeaf) {
@@ -74,22 +85,28 @@ public class Deschubs {
         }
     }
 
+    // decompress LZW-compressed file
     public static void expandL(String fin) {
 
+        // read in the LZW dictionary from input stream
         BinaryIn in = new BinaryIn(fin);
         String fout = fin.substring(0, fin.lastIndexOf(".ll"));
         BinaryOut out = new BinaryOut(fout);
 
+        // number of codewords = 2^W
         String[] st = new String[L];
         int i;
 
+        // initialize symbol table with all 1-character strings
         for (i = 0; i < R; i++)
             st[i] = "" + (char) i;
         st[i++] = "";
 
+        // read in codeword, output corresponding string, and add new string to the
         int codeword = in.readInt(W);
         String val = st[codeword];
 
+        // loop until we reach end of file
         while (true) {
             out.write(val);
             codeword = in.readInt(W);
@@ -105,6 +122,7 @@ public class Deschubs {
         out.flush();
     }
 
+    // uncompress the archive file using Huffman and extract content
     public static void expandA(String fin) throws IOException {
         BinaryIn in = new BinaryIn(fin);
         String fout = fin.substring(0, fin.lastIndexOf(".zh"));
@@ -196,6 +214,7 @@ public class Deschubs {
             extension = input.substring(i + 1);
         }
 
+        // Huffman
         if (extension.equals("hh")) {
             File file = new File(input.substring(0, input.lastIndexOf(".hh")));
             if (file.exists()) {
@@ -206,6 +225,7 @@ public class Deschubs {
             expandH(input);
         }
 
+        // LZW
         if (extension.equals("ll")) {
             File file = new File(input.substring(0, input.lastIndexOf(".ll")));
             if (file.exists()) {
@@ -217,15 +237,16 @@ public class Deschubs {
             expandL(input);
         }
 
+        // Archive
         if (extension.equals("zh")) {
             expandA(input);
         }
 
-        if (extension.equals("zl")) {
+        // if extension does not equal to hh, ll, or zh say that file type is not
+        // supported
+        if (!extension.equals("hh") && !extension.equals("ll") && !extension.equals("zh")) {
             System.err.println("This file type is not supported.");
         }
-
-        System.out.println("Decompression complete.");
     }
 
 }

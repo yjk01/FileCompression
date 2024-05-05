@@ -2,10 +2,10 @@
  * Program     : Huffman Encoding
  * Description : This program compresses a file using Huffman encoding.
  * Author      : Jun Kim
- * Date        : 03/08/2024
+ * Date        : 05/07/2024
  * Course      : CS375
- * Compile     : javac HuffmanSE2.java
- * Execute     : java HuffmanSE2 uncompressed-file-name compressed-file-name (l)
+ * Compile     : javac SchubsH.java
+ * Execute     : java SchubsH uncompressed-file-name
  */
 
 import java.io.File;

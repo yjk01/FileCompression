@@ -1,8 +1,18 @@
+/*
+ * Program     : Archive Compression
+ * Description : This program archives a file and compresses it using Huffman encoding.
+ * Author      : Jun Kim
+ * Date        : 05/07/2024
+ * Course      : CS375
+ * Compile     : javac SchubsArc.java
+ * Execute     : java SchubsArc archive-name file1 file2 ...
+ */
+
 import java.io.File;
 import java.io.IOException;
 
 public class SchubsArc {
-    private static final int R = 256;
+    private static final int R = 256; // alphabet size of extended ASCII
 
     // Huffman trie node
     private static class Node implements Comparable<Node> {
@@ -53,6 +63,7 @@ public class SchubsArc {
                     continue; // Skip to the next file
                 }
 
+                // Read input file
                 BinaryIn bin = new BinaryIn(args[i]);
                 long fileSize = inFile.length();
                 int fileNameSize = args[i].length();

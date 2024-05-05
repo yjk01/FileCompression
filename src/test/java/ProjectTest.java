@@ -1,9 +1,9 @@
 /*
-* Program : Huffman Encoding Test
-* Description : This program tests the program that compresses a file using
+* Program : Huffman / LZW compression/decompression and Archive Compression Test
+* Description : This program tests the program that compresses a file using Huffman encoding / LZW or extracts an archive file and compresses a file and compresses it using
 Huffman encoding.
 * Author : Jun Kim
-* Date : 03/08/2024
+* Date : 04/07/2024
 * Course : CS375
 * Execute : mvn clean // mvn compile // mvn test
 */
