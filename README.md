@@ -1,5 +1,3 @@
-# File Compression Algorithms and Tools
-
 ## I. Design
 
 ### A. Huffman Encoding
