@@ -58,7 +58,7 @@
 
 ## III. Test Instructions
 
-1. \*\*Ensure you are in the same level as the "pom.xml" file.
+1. Ensure you are in the same level as the "pom.xml" file.
 2. **Run:** `mvn compile // mvn Test`
 
 ## IV. Run Examples
