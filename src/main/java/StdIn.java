@@ -1,4 +1,10 @@
+
 /*************************************************************************
+ *  * Program: StdIn.java
+ * Description: Reads in data of various types from standard input.
+ * Author: Sedgewick, Jun Kim
+ * Date: 05/07/2024
+ * Course: CS375
  *  Compilation:  javac StdIn.java
  *  Execution:    java StdIn
  *
@@ -10,19 +16,6 @@ import java.io.BufferedInputStream;
 import java.util.Locale;
 import java.util.Scanner;
 
-/**
- *  <i>Standard input</i>. This class provides methods for reading strings
- *  and numbers from standard input.
- *  <p>
- *  The Locale used is: language = English, country = US. This is consistent
- *  with the formatting conventions with Java floating-point literals,
- *  command-line arguments (via <tt>Double.parseDouble()</tt>)
- *  and standard output (via <tt>System.out.print()</tt>). It ensures that
- *  standard input works with the input files used in the textbook.
- *  <p>
- *  For additional documentation, see <a href="http://introcs.cs.princeton.edu/15inout">Section 1.5</a> of
- *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i> by Robert Sedgewick and Kevin Wayne.
- */
 public final class StdIn {
 
     // assume Unicode UTF-8 encoding
@@ -35,11 +28,13 @@ public final class StdIn {
     private static Scanner scanner = new Scanner(new BufferedInputStream(System.in), charsetName);
 
     // static initializer
-    static { scanner.useLocale(usLocale); }
+    static {
+        scanner.useLocale(usLocale);
+    }
 
     // singleton pattern - can't instantiate
-    private StdIn() { }
-
+    private StdIn() {
+    }
 
     /**
      * Is there only whitespace left on standard input?
@@ -103,10 +98,14 @@ public final class StdIn {
      */
     public static boolean readBoolean() {
         String s = readString();
-        if (s.equalsIgnoreCase("true"))  return true;
-        if (s.equalsIgnoreCase("false")) return false;
-        if (s.equals("1"))               return true;
-        if (s.equals("0"))               return false;
+        if (s.equalsIgnoreCase("true"))
+            return true;
+        if (s.equalsIgnoreCase("false"))
+            return false;
+        if (s.equals("1"))
+            return true;
+        if (s.equals("0"))
+            return false;
         throw new java.util.InputMismatchException();
     }
 
@@ -140,13 +139,15 @@ public final class StdIn {
      * Return rest of input from standard input
      */
     public static String readAll() {
-        if (!scanner.hasNextLine()) return null;
+        if (!scanner.hasNextLine())
+            return null;
 
-        // reference: http://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
+        // reference:
+        // http://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
         return scanner.useDelimiter("\\A").next();
     }
 
-   /**
+    /**
      * Read rest of input as array of ints
      */
     public static int[] readInts() {
@@ -157,7 +158,7 @@ public final class StdIn {
         return vals;
     }
 
-   /**
+    /**
      * Read rest of input as array of doubles
      */
     public static double[] readDoubles() {
@@ -168,15 +169,13 @@ public final class StdIn {
         return vals;
     }
 
-   /**
+    /**
      * Read rest of input as array of strings
      */
     public static String[] readStrings() {
         String[] fields = readAll().trim().split("\\s+");
         return fields;
     }
-
-
 
     /**
      * Unit test

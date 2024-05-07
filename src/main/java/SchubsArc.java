@@ -1,5 +1,5 @@
 /*
- * Program     : Archive Compression
+ * Program     : Archive and Compress
  * Description : This program archives a file and compresses it using Huffman encoding.
  * Author      : Jun Kim
  * Date        : 05/07/2024
@@ -84,8 +84,17 @@ public class SchubsArc {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("No files");
+        if (args.length < 2) {
+            throw new IllegalArgumentException(
+                    "Wrong number of arguments! Try java SchubsArc archive-name file1 file2 ...");
+        }
+
+        File filein = new File(args[0] + ".zh");
+
+        if (filein.exists()) {
+            System.out.println("File " + args[0] + " already exists. Skipping archive.");
+            // dont run the rest of the program if the file already exists
+            return;
         }
 
         String tarFileName = args[0];

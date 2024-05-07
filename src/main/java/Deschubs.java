@@ -13,11 +13,9 @@ import java.io.IOException;
 
 public class Deschubs {
 
-    private static final int R = 128;
-    private static final int L = 256;
-    private static final int W = 8;
-
-    private static boolean log = false;
+    private static int R = 128;
+    private static int L = 256;
+    private static int W = 8;
 
     private static class Node implements Comparable<Node> {
         private final char ch;
@@ -87,6 +85,10 @@ public class Deschubs {
 
     // decompress LZW-compressed file
     public static void expandL(String fin) {
+
+        R = 256;
+        L = 4096;
+        W = 12;
 
         // read in the LZW dictionary from input stream
         BinaryIn in = new BinaryIn(fin);

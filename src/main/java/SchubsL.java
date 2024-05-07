@@ -11,9 +11,9 @@
 import java.io.File;
 
 public class SchubsL {
-    private static final int R = 128; // number of input chars
-    private static final int L = 256; // number of codewords = 2^W
-    private static final int W = 8; // codeword width
+    private static final int R = 256; // number of input chars
+    private static final int L = 4096; // number of codewords = 2^W
+    private static final int W = 12; // codeword width
 
     // LZW compression
     public static void compress(String fin) {
